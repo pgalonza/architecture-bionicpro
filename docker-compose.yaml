@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: keycloak_user
       POSTGRES_PASSWORD: keycloak_password
     volumes:
-      - ./postgres-keycloak-data:/var/lib/postgresql/data
+      - kc-db:/var/lib/postgresql/data
     ports:
       - "5433:5432"
   keycloak:
@@ -20,7 +20,7 @@ services:
       KC_DB_URL: jdbc:postgresql://keycloak_db:5432/keycloak_db
       KC_DB_USERNAME: keycloak_user
       KC_DB_PASSWORD: keycloak_password
-    command: 
+    command:
       - start-dev
       - --import-realm
     volumes:
@@ -36,7 +36,24 @@ services:
     ports:
       - "3000:3000"
     environment:
-      REACT_APP_API_URL: http://localhost:8000
+      REACT_APP_API_URL: http://localhost:5000
       REACT_APP_KEYCLOAK_URL: http://localhost:8080
       REACT_APP_KEYCLOAK_REALM: reports-realm
       REACT_APP_KEYCLOAK_CLIENT_ID: reports-frontend
+  reports:
+    build:
+      context: ./reports
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - keycloak
+    environment:
+      FLASK_APP_PORT: 5000
+      FRONT_URL: http://localhost:3000
+      FLASK_APP_KEYCLOAK_URL: http://localhost:8080
+      FLASK_APP_KEYCLOAK_REALM: reports-realm
+      FLASK_APP_KEYCLOAK_CLIENT_ID: reports-frontend
+
+volumes:
+  kc-db:
