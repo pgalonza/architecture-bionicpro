@@ -25,9 +25,9 @@ def get_jwt_public_key():
 
     for attempt in range(max_retries):
         try:
-            response = requests.get(
-                f'{os.environ.get("FLASK_APP_KEYCLOAK_URL")}/realms/{os.environ.get("FLASK_APP_KEYCLOAK_REALM")}'
-            )
+            realm_url = f'{os.environ.get("FLASK_APP_KEYCLOAK_URL")}/realms/{os.environ.get("FLASK_APP_KEYCLOAK_REALM")}'
+            print(realm_url)
+            response = requests.get(realm_url)
             return response.json()['public_key']
         except requests.exceptions.ConnectionError:
             print(f"Error getting JWT public key (attempt {attempt + 1}/{max_retries})")

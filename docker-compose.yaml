@@ -51,7 +51,7 @@ services:
     environment:
       FLASK_APP_PORT: 5000
       FRONT_URL: http://localhost:3000
-      FLASK_APP_KEYCLOAK_URL: http://localhost:8080
+      FLASK_APP_KEYCLOAK_URL: http://keycloak:8080
       FLASK_APP_KEYCLOAK_REALM: reports-realm
       FLASK_APP_KEYCLOAK_CLIENT_ID: reports-frontend
 
